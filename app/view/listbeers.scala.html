@@ -1,0 +1,54 @@
+@(optuser: Option[RateBeer.UserSnow], beers: Seq[(RateBeer.BeerSnow, Option[Int])])
+@default(optuser){
+
+<script>
+    var listBeerApp = angular.module('listBeerApp', []);
+    listBeerApp.controller('listBeerCtrl', function($scope, $http) {
+        $scope.ids = [];
+        $scope.grade = function(id) {
+            var gradejson = {'grade': $scope.ids[id]};
+            console.log(gradejson);
+            $http.post('/api/simpleGrade/' + id, gradejson)
+            .then( function(resp) {
+                console.log("successful graded");
+            },
+            function(resp) {
+                console.log("fail graded");
+            });        }
+    });
+</script>
+<div ng-app="listBeerApp">
+<H2> List of Beers </H2>
+@if(beers.isEmpty) {
+    <div>
+        No beers yet.
+    </div>
+    } else {
+    <table style="width:77%" ng-controller="listBeerCtrl">
+        <thead>
+            <th>name</th>
+            <th>type</th>
+
+            <th>grade</th>
+            @optuser.map( _ => <th>you graded</th>)
+        </thead>
+        @for((beer, userGrade) <- beers) {
+            <tr>
+                <td><a href="@routes.Application.beerScreen(beer.URI)">@beer.name</a></td>
+                <td>@beer.beerType</td>
+                <td>@beer.averageGrade</td>
+                @optuser.map{ _ =>
+                    @userGrade.fold{
+                    <td id="@beer.URI">
+                         <input ng-model="ids[@beer.URI]" type="text" ng-keyup="$event.keyCode == 13 && grade(@beer.URI)" />
+                    </td>
+                    }{ grade =>
+                        <td>@grade</td>
+                    }
+                }
+            </tr>
+        }
+    </table>
+</div>
+    }
+}

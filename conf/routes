@@ -1,0 +1,23 @@
+GET     /                               controllers.Application.index
+
+GET     /user/:user                     controllers.Application.userScreen(user)
+
+GET     /beers                          controllers.Application.beers
+
+GET     /users                          controllers.Application.users
+
+GET     /beers/:beer                    controllers.Application.beerScreen(beer)
+
+GET     /api/logout                     controllers.Application.logout
+
+POST    /api/login                      controllers.Application.login
+
+POST    /api/signup                     controllers.Application.signUp
+
+POST    /api/newBeer                    controllers.Application.newBeer
+
+POST    /api/simpleGrade/:beeruri       controllers.Application.newSimpleGrade(beeruri)
+
+POST    /api/grade/:beeruri             controllers.Application.newGrade(beeruri)
+
+GET     /assets/*file                   controllers.Assets.at(path="/public", file)

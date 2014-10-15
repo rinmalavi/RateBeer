@@ -1,0 +1,49 @@
+@(optuser: Option[RateBeer.UserSnow])(body: Html)
+<html>
+<head>
+    <link rel='stylesheet' href='@routes.Assets.at("stylesheets/index.css")'>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular.min.js"></script>
+</head>
+<body>
+<div>
+    <span class="home">
+        <a href="@routes.Application.index()"><h1>Rate Beer</h1></a>
+    </span>
+    <span class="user">
+        @optuser.map{ usr =>
+            Logged in as @usr.name
+            <a href="/api/logout">logout</a>
+        }
+        <br>
+        @if(optuser.isEmpty) {
+        signin:
+        <form action="@routes.Application.login" method="POST">
+            <input type="text" name="name"/>
+            <input type="text" name="password"/>
+            <input type="submit" value="add"/>
+        </form>
+
+        signup:
+        <form action="@routes.Application.signUp" method="POST">
+            <input type="text" name="email"/>
+            <input type="text" name="name"/>
+            <input type="text" name="password"/>
+            <input type="submit" value="add"/>
+        </form>
+        } else {
+
+          Add a new beer:
+            <form action="@routes.Application.newBeer" method="POST">
+                name of the beer: <input type="text" name="name"/>
+                type of the beer: <input type="text" name="type"/>
+                <input type="submit" value="add"/>
+            </form>
+        }
+    </span>
+    @body
+</div>
+<br>
+<a href="@routes.Application.beers()">list of all beers</a>
+<a href="@routes.Application.users()">list of all users</a>
+</body>
+</html>

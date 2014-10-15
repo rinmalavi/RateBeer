@@ -1,0 +1,15 @@
+@(optuser: Option[RateBeer.UserSnow], Users: Seq[RateBeer.UserSnow])
+@default(optuser){
+    @if(Users.isEmpty) {
+    <div>
+        No Users yet.
+    </div>
+    } else {
+        <h2>List User</h2>
+        <ul>
+            @for(User <- Users) {
+                <li><a href="@routes.Application.userScreen(User.URI)"> @User.name</a></li>
+            }
+        </ul>
+    }
+}

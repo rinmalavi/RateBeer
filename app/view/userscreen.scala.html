@@ -1,0 +1,27 @@
+@(optuser: Option[RateBeer.UserSnow], userOpt: Option[RateBeer.UserSnow])
+@default(optuser){
+@if(userOpt.isEmpty){<div class="nousertoshow">found no user to show</div>}
+@userOpt.map{ user =>
+        Showing page for user: <h2 class="username">@user.name</h2>
+        <div>
+        Added beers
+        <ul>
+            @for(beer <- user.beers) {
+            <li>@beer.info.name</li>
+        }
+        </ul>
+
+        Average grade received for addie: @user.averageBeerAddedGrade
+        </div>
+<div>
+
+Given grades
+        <ul>
+            @for(grade <- user.grades) {
+            <li>@grade.beerID @grade.grade</li>
+            }
+        </ul>
+        Average grade given for addies: @user.averageGivenGrade
+        }
+</div>
+}

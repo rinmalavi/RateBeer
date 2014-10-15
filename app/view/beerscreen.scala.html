@@ -1,0 +1,9 @@
+@(optuser: Option[RateBeer.UserSnow], beer2show: Option[RateBeer.BeerSnow])
+@default(optuser){
+@beer2show.map { beer =>
+        Showing info for beer:
+            <H2>@beer.name</H2>
+        @beer.averageGrade
+        }
+
+}
