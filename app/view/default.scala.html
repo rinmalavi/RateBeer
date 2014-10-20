@@ -1,49 +1,203 @@
 @(optuser: Option[RateBeer.UserSnow])(body: Html)
 <html>
 <head>
-    <link rel='stylesheet' href='@routes.Assets.at("stylesheets/index.css")'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,800,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link rel='stylesheet' href='@routes.Assets.at("css/bootstrap.min.css")'>
+    <link rel='stylesheet' href='@routes.Assets.at("css/style.min.css")'>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular.min.js"></script>
 </head>
 <body>
-<div>
-    <span class="home">
-        <a href="@routes.Application.index()"><h1>Rate Beer</h1></a>
-    </span>
-    <span class="user">
-        @optuser.map{ usr =>
-            Logged in as @usr.name
-            <a href="/api/logout">logout</a>
-        }
-        <br>
-        @if(optuser.isEmpty) {
-        signin:
-        <form action="@routes.Application.login" method="POST">
-            <input type="text" name="name"/>
-            <input type="text" name="password"/>
-            <input type="submit" value="add"/>
-        </form>
+<div class="container">
+    <header class="header">
+        <p class="text-center">
 
-        signup:
-        <form action="@routes.Application.signUp" method="POST">
-            <input type="text" name="email"/>
-            <input type="text" name="name"/>
-            <input type="text" name="password"/>
-            <input type="submit" value="add"/>
-        </form>
-        } else {
+            @if(optuser.isEmpty) {
 
-          Add a new beer:
-            <form action="@routes.Application.newBeer" method="POST">
-                name of the beer: <input type="text" name="name"/>
-                type of the beer: <input type="text" name="type"/>
-                <input type="submit" value="add"/>
-            </form>
-        }
-    </span>
-    @body
-</div>
-<br>
-<a href="@routes.Application.beers()">list of all beers</a>
-<a href="@routes.Application.users()">list of all users</a>
+            <a class="header-link" href="#modal-login" data-toggle="modal" data-target="#modal-login" >Log In</a>
+            <a class="header-link" href="#modal-register" data-toggle="modal" data-target="#modal-register" >Register</a>
+
+            } else {
+
+            @optuser.map{ usr =>
+                <strong>@usr.name</strong>
+                <a class="header-link" href="/api/logout">logout</a>
+            }
+
+            }
+
+        </p>
+        <p class="text-center">
+            <a class="logo" href="@routes.Application.index()">
+                <img src='@routes.Assets.at("img/logo.png")' alt="Beer">
+            </a>
+
+        </p>
+    </header>
+
+    <div class="main">
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+                <p class="text-center">
+                    <img src='@routes.Assets.at("img/homepage-img.png")' alt="Beer">
+                </p>
+            </div>
+        </div>
+        <div class="cta-btns">
+            <div class="row">
+
+                @if(optuser.isEmpty) {
+
+                <div class="col-sm-4 col-sm-offset-1">
+                    <p class="text-center">
+                        <a href="#modal-login" data-toggle="modal" data-target="#modal-login" class="btn cta-btn alt">
+                            Log In <span class="glyphicon glyphicon-log-in"></span>
+                        </a>
+                    </p>
+                </div>
+                <div class="col-sm-2">
+                    <p class="text-center">
+                        <img src='@routes.Assets.at("img/logo-sm.png")' alt="Beer">
+                    </p>
+                </div>
+                <div class="col-sm-4">
+                    <p class="text-center">
+                        <a href="#modal-register" data-toggle="modal" data-target="#modal-register" class="btn cta-btn primary">
+                            <span class="glyphicon glyphicon-user"></span> Register
+                        </a>
+                    </p>
+                </div>
+
+                } else {
+
+                <p class="text-center">
+                    <a href="#modal-add-beer" data-toggle="modal" data-target="#modal-add-beer" class="btn cta-btn alt">
+                        Add a new beer <span class="glyphicon glyphicon-star"></span>
+                    </a>
+                </p>
+
+                }
+
+            </div>
+        </div>
+
+        <!-- modal-login -->
+        <div class="modal fade" id="modal-login" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Log In</h4>
+                      </div>
+                      <div class="modal-body">
+                            <form action="@routes.Application.login" method="POST" class="form-horizontal pt-20">
+                                <div class="form-group">
+                                    <label for="loginName" class="col-sm-4 control-label">Your name</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="name" class="form-control" id="loginName" placeholder="Enter name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="loginPass" class="col-sm-4 control-label">Your password</label>
+                                    <div class="col-sm-6">
+                                        <input type="password" name="password" class="form-control" id="loginPass" placeholder="Enter password">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-6 col-sm-offset-4">
+                                        <button type="submit" class="btn btn-primary">Login</button>
+                                    </div>
+                                </div>
+                            </form>
+                      </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- modal-registration -->
+        <div class="modal fade" id="modal-register" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Registration</h4>
+                      </div>
+                      <div class="modal-body">
+                        <form action="@routes.Application.signUp" method="POST" class="form-horizontal pt-20">
+                            <div class="form-group">
+                                <label for="registerEmail" class="col-sm-4 control-label">Your email</label>
+                                <div class="col-sm-6">
+                                    <input type="email" name="email" class="form-control" id="registerEmail" placeholder="Enter email" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="registerName" class="col-sm-4 control-label">Your name</label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="name" class="form-control" id="registerName" placeholder="Enter name" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="registerPass" class="col-sm-4 control-label">Your password</label>
+                                <div class="col-sm-6">
+                                    <input type="password" name="password" class="form-control" id="registerPass" placeholder="Enter password" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6 col-sm-offset-4">
+                                    <button class="btn btn-primary" type="submit">Register</button>
+                                </div>
+                            </div>
+                        </form>
+                      </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- modal-add-beer -->
+        <div class="modal fade" id="modal-add-beer" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Add a new beer</h4>
+                      </div>
+                      <div class="modal-body">
+                        <form action="@routes.Application.newBeer" method="POST" class="form-horizontal pt-20">
+                            <div class="form-group">
+                                <label for="beerName" class="col-sm-4 control-label">Name of the beer</label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="email" class="form-control" id="beerName" placeholder="Enter beer name" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="beerType" class="col-sm-4 control-label">Type of the beer</label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="name" class="form-control" id="beerType" placeholder="Enter beer type" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6 col-sm-offset-4">
+                                    <button class="btn btn-primary" type="submit">Add</button>
+                                </div>
+                            </div>
+                        </form>
+                      </div>
+                </div>
+            </div>
+        </div>
+
+        @body
+
+        <p class="text-center pt-20">
+            <a class="alternate" href="@routes.Application.beers()">list of all beers</a> | <a href="@routes.Application.users()">list of all users</a>
+        </p>
+
+    </div><!-- main -->
+    <footer class="footer">
+        <p class="text-center center-line"><span><small>powered by <strong><a href="http://dsl-platform.com" target="blank">DSL Platform</a></strong></small></span></p>
+    </footer>
+
+</div><!-- container -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src='@routes.Assets.at("js/bootstrap-3.2.0.min.js")'></script>
 </body>
 </html>
