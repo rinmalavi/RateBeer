@@ -1,6 +1,6 @@
 u=rinmalavi@gmail.com
 p=qwe321
-db=localhost:5434/dccTest?user=dccTest&password=dccTest
+db=localhost:5432/dccTest?user=dccTest&password=dccTest
 #java_client=lib/generatedMode.jar
 scala_client=lib/generatedModel.jar
 revenj=revenj/generatedModel.dll

@@ -9,12 +9,15 @@
             var gradejson = {'grade': $scope.ids[id]};
             console.log(gradejson);
             $http.post('/api/simpleGrade/' + id, gradejson)
-            .then( function(resp) {
-                console.log("successful graded");
-            },
-            function(resp) {
-                console.log("fail graded");
-            });        }
+            .then(
+                function(resp) {
+                    console.log("successful graded");
+                },
+                function(resp) {
+                    console.log("fail graded");
+                }
+            );
+        }
     });
 </script>
 <div ng-app="listBeerApp">
@@ -28,7 +31,6 @@
         <thead>
             <th>name</th>
             <th>type</th>
-
             <th>grade</th>
             @optuser.map( _ => <th>you graded</th>)
         </thead>
