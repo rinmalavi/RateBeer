@@ -72,8 +72,8 @@ object Application extends Controller {
   val signUpForm: Form[(String, String, String)] = Form {
     mapping(
       "name" -> text,
-      "email" -> text,
-      "password" -> text
+      "password" -> text,
+      "email" -> text
     )(Tuple3.apply)(Some.apply)
   }
 
