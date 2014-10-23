@@ -1,5 +1,6 @@
 package controllers
 
+import com.dslplatform.api.client.ReportingProxy
 import com.scalabeer._
 import com.dslplatform.api.patterns._
 import org.slf4j.LoggerFactory
@@ -21,10 +22,11 @@ object Application extends Controller {
   private val locator = com.dslplatform.api.client.Bootstrap.init(getClass.getResourceAsStream("/dsl-project.props"))
 
   private lazy val userRepository = locator.resolve[PersistableRepository[User]]
-  private lazy val userSnowRepository = locator.resolve[Repository[UserSnow]]
-  private lazy val beerSnowRepository = locator.resolve[Repository[BeerSnow]]
+  private lazy val UserGridRepository = locator.resolve[Repository[UserGrid]]
+  private lazy val BbeerGridRepository = locator.resolve[Repository[BeerGrid]]
   private lazy val beerRepository = locator.resolve[PersistableRepository[Beer]]
   private lazy val gradeRepository = locator.resolve[PersistableRepository[Grade]]
+  private lazy val reportingProxy = locator.resolve[ReportingProxy]
 
   private lazy implicit val ec = locator.resolve[ExecutionContext]
   private lazy implicit val duration = 10 minutes
@@ -35,21 +37,25 @@ object Application extends Controller {
 
   private def getUser(username: String): Future[User] = userRepository.find(username)
 
-  private def getUserInfo(username: String): Future[Seq[UserSnow]] = {
-    userSnowRepository.search(UserSnow.findUser(username))
+  private def getUserInfo(username: String): Future[Seq[UserGrid]] = {
+    UserGridRepository.search(UserGrid.findUser(username))
+  }
+
+  private def getUserReport(username: String): Future[UserReport.Result] = {
+    reportingProxy.populate(new UserReport(username))
   }
 
   private def isValid(username: String, password: String): Future[Boolean] = {
     userRepository.search(new User.findUser(username, password)).map(_.nonEmpty)
   }
 
-  def getBeers: Future[Seq[BeerSnow]] = beerSnowRepository.search()
+  def getBeers: Future[Seq[BeerGrid]] = BbeerGridRepository.search()
 
   def getBeer(uri: String): Future[Beer] = beerRepository.find(uri)
 
-  def getBeerInfo(uri: String): Future[BeerSnow] = beerSnowRepository.find(uri)
+  def getBeerInfo(uri: String): Future[BeerGrid] = BbeerGridRepository.find(uri)
 
-  def getUsers: Future[Seq[UserSnow]] = userSnowRepository.search()
+  def getUsers: Future[Seq[UserGrid]] = UserGridRepository.search()
 
   def addGrade(grade: Grade) = gradeRepository.insert(grade)
 
@@ -94,7 +100,7 @@ object Application extends Controller {
   val gradeForm: Form[(String, String, String)] = Form {
     mapping(
       "grade" -> text,
-      "detailed" -> text,
+      "description" -> text,
       "tags" -> text
     )(Tuple3.apply)(Some.apply)
   }
@@ -102,7 +108,7 @@ object Application extends Controller {
   //-------------------------------------------------
 
   def index = {
-    def indexPage(optUser: Option[UserSnow]) = Ok(view.html.index(optUser))
+    def indexPage(optUser: Option[UserGrid]) = Ok(view.html.index(optUser))
 
     Authenticated(username, rh => indexPage(None)) {
       username =>
@@ -113,11 +119,11 @@ object Application extends Controller {
   }
 
   def userScreen(user2showName: String) = Action.async { implicit request =>
-    def userScreenPage(currentUser: Option[UserSnow], user2show: Option[UserSnow]) = Ok(view.html.userscreen(currentUser, user2show))
+    def userScreenPage(currentUser: Option[UserGrid], user2show: Option[UserReport.Result]) = Ok(view.html.userscreen(currentUser, user2show))
 
-    val user2showFO = getUserInfo(user2showName).map(_.headOption)
+    val user2showFO = getUserReport(user2showName)
 
-    val currentUserFO: Future[Option[UserSnow]] = request.session.get("username").map {
+    val currentUserFO: Future[Option[UserGrid]] = request.session.get("username").map {
       currentUserName => getUserInfo(currentUserName).map(_.headOption)
     }.getOrElse(Future.successful(None))
 
@@ -125,18 +131,18 @@ object Application extends Controller {
       user2show =>
         currentUserFO.map {
           currentUserO =>
-            userScreenPage(currentUserO, user2show) // todo - report list of grades
+            userScreenPage(currentUserO, Option(user2show)) // todo - no good
         }
     }
   }
 
   def beerScreen(beer2showName: String) = Action.async {
     implicit request =>
-      def beerScreenPage(currentUser: Option[UserSnow], beer2show: Option[BeerSnow]) = Ok(view.html.beerscreen(currentUser, beer2show))
+      def beerScreenPage(currentUser: Option[UserGrid], beer2show: Option[BeerGrid]) = Ok(view.html.beerscreen(currentUser, beer2show))
 
       val beer2showFO = getBeerInfo(beer2showName)
 
-      val currentUserFO: Future[Option[UserSnow]] = request.session.get("username").map {
+      val currentUserFO: Future[Option[UserGrid]] = request.session.get("username").map {
         currentUserName => getUserInfo(currentUserName).map(_.headOption)
       }.getOrElse(Future.successful(None))
 
@@ -151,9 +157,9 @@ object Application extends Controller {
   }
 
   def users = Action.async { implicit request =>
-    def usersPage(currentUser: Option[UserSnow], users: Seq[UserSnow]) = Ok(view.html.listusers(currentUser, users))
+    def usersPage(currentUser: Option[UserGrid], users: Seq[UserGrid]) = Ok(view.html.listusers(currentUser, users))
 
-    val currentUserFO: Future[Option[UserSnow]] = request.session.get("username").map {
+    val currentUserFO: Future[Option[UserGrid]] = request.session.get("username").map {
       currentUserName => getUserInfo(currentUserName).map(_.headOption)
     }.getOrElse(Future.successful(None))
 
@@ -168,9 +174,9 @@ object Application extends Controller {
 
   def beers = Action.async { implicit request => // todo - make report
 
-    def listBeersPage(currentUser: Option[UserSnow], beers: Seq[(BeerSnow, Option[Int])]) = Ok(view.html.listbeers(currentUser, beers))
+    def listBeersPage(currentUser: Option[UserGrid], beers: Seq[(BeerGrid, Option[Int])]) = Ok(view.html.listbeers(currentUser, beers))
 
-    val currentUserFO: Future[Option[UserSnow]] = request.session.get("username").map {
+    val currentUserFO: Future[Option[UserGrid]] = request.session.get("username").map {
       currentUserName => getUserInfo(currentUserName).map(_.headOption)
     }.getOrElse(Future.successful(None))
 
@@ -178,14 +184,14 @@ object Application extends Controller {
       beers =>
         currentUserFO.map {
           currentUserO =>
-            val beersnow = beers.map{
+            val BeerGrid = beers.map{
               beer =>
                 val userGrade = currentUserO.flatMap{
                   _.grades.filter{grade => grade.beer.info.name == beer.name }.map(_.grade).headOption // todo - hidden lazy load - optimize with report
                 }
                 (beer, userGrade)
             }
-            listBeersPage(currentUserO, beersnow)
+            listBeersPage(currentUserO, BeerGrid)
         }
     }
   }
@@ -247,8 +253,31 @@ object Application extends Controller {
       })
   }
 
-  def newGrade(uri: String) = Action { implicit request =>
-    Ok("Not there yet!")
+  def newGrade(uri: String) = Action.async { implicit request =>
+    request.session.get("username").fold(
+      Future.successful(BadRequest("Not signed in!")))(
+        username => {
+          gradeForm.bindFromRequest().fold(
+            a => Future.successful(BadRequest("Not a grade!" + a)),
+          {case (g: String, d: String, t: String) => {
+            getUser(username).flatMap {
+              user =>
+                getBeer(uri).flatMap {
+                  beer =>
+                    val grade = Grade(user, beer, grade = g.toInt, detailedDescription = d, tags = t.split(" "))
+                    val inserted = gradeRepository.insert(grade).map {
+                      _ =>
+                        Ok("You graded " + g)
+                    }.recover { case e =>
+                      println(e)
+                      Results.NotModified
+                    }
+                    inserted
+                }
+            }
+          } }
+          )
+        })
   }
   //-------------------------------------------------
 

@@ -12,7 +12,7 @@ module scalabeer
     String beerType;
   }
 
-  snowflake<Beer> BeerSnow {
+  snowflake<Beer> BeerGrid {
     info.name;
     info.beerType;
     adder.username addersName;
@@ -36,7 +36,7 @@ module scalabeer
     }
   }
 
-  snowflake<User> UserSnow {
+  snowflake<User> UserGrid {
     username name;
     grades;
     beers;
@@ -49,6 +49,12 @@ module scalabeer
     calculated double averageBeerAddedGrade from 'it => it.beers.Where(beer => beer.grades.Count() > 0 ).Select(beer => beer.grades.Average(grade => grade.grade)).DefaultIfEmpty().Average()';
   }
 
+  report UserReport {
+    String username;
+    UserGrid userGrid 'it => it.name == username';
+    List<GradeGrid> userGrades 'it => it.user.username == username';
+  }
+
   aggregate Grade(userID, beerID) {
     User *user;
     Beer *beer;
@@ -57,5 +63,14 @@ module scalabeer
     String   detailedDescription;
 
     Int grade;
+  }
+
+  snowflake<Grade> GradeGrid {
+    user;
+    beer;
+    tags;
+
+    detailedDescription;
+    grade;
   }
 }

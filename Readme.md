@@ -6,7 +6,7 @@ Project setup:
 sudo apt-get install postgresql-9.3
 
 #login as postgres superuser
-sudo su - postges
+sudo su - postgres
 
 #create database user "scalabeer", set password to "scalabeerpassword"
 createuser scalabeer -DIRS
@@ -37,7 +37,7 @@ sudo apt-get install mono-devel
 
 ##Intro
 This will try to be a guide through a process of modeling a fairly complicated portal for Beer rating.
-We'll use DSL-platform for our persistence and modeling, Play2 for presentation.   
+We'll use DSL-platform for our persistence and modeling, Play2 for presentation.
 
 This text assumes you have mono(3.2+), java(8+) and sbt installed.
 
@@ -66,11 +66,11 @@ You should worry only about the logic your application processes and the present
 ####Simple Model
 
     module Site {
-        root Person {
-          String name;
-          Int height;
-          Int age;
-        }
+      root Person {
+        String name;
+        Int height;
+        Int age;
+      }
     }
 
 here we express that we want one schema with one root entity containing 2 fields.
@@ -150,19 +150,19 @@ We'll change our model to resemble our intentions.
 And remove the height field because all are equal height under the Beer.
 
     module RateBeer {
-        root Beer {
-            String name;
-            String beerType;
-        }
-        root Grade {
-            Int     rate;
-            Beer    *beer;
-            User    *user;
-        }
-        root User {
-            String name;
-            Int age;
-        } 
+      root Beer {
+        String name;
+        String beerType;
+      }
+      root Grade {
+        Int     rate;
+        Beer    *beer;
+        User    *user;
+      }
+      root User {
+        String name;
+        Int age;
+      } 
     }
 
 Lets apply this schema. Call (1)
@@ -202,8 +202,8 @@ This can be done by noting a field, we want to make a PK, next to the roots name
 Like this...
 
     root User (username) {
-        String username
-        ...
+      String username
+      ...
 
 This way the username becomes User's ID.
 
@@ -241,7 +241,7 @@ Maybe even something like average grade of average grades of beers he added...
 
 For this we want to have a view into the User we define
 
-    snowflake UserSnow {
+    snowflake UserGrid {
 
 pass it 
 
@@ -254,21 +254,23 @@ Within it call a` linq` statement to express operations on data.
 Linq is highly functional language so this operations can be very expressively defined.
 
         calculated double averageGivenGrade from 'it => 
-            it.grades
-                .Select(g => g.grade)
-                .DefaultIfEmpty()
-                .Average()';
+          it.grades
+            .Select(g => g.grade)
+            .DefaultIfEmpty()
+            .Average()';
         calculated double averageBeerAddedGrade from 'it => 
-            it.beers
-                .Where(beer => beer.grades.Count() > 0 )
-                .Select(beer => beer.grades.Average(grade => grade.grade))
-                .DefaultIfEmpty()
-                .Average()'; 
+          it.beers
+            .Where(beer => beer.grades.Count() > 0 )
+            .Select(beer => beer.grades.Average(grade => grade.grade))
+            .DefaultIfEmpty()
+            .Average()'; 
 
 Close the snowflake section with `}`.
 And apply the new DSL.
-In the classpath you will now notice there is a new class called `UserSnow`.
-Similarly will make `BeerSnow` with information we want to show about the beers.
+In the classpath you will now notice there is a new class called `UserGrid`.
+Similarly will make `BeerGrid` with information we want to show about the beers.
+And `GradeGrid` with information about grades.
+Implementation is fairly simple and you can see it in `dsl/model/scalabeer.dsl`  
 
 ## Play
 
@@ -279,9 +281,9 @@ This are methods are in an object which extend `Controller` trait.
 Plays version of scala App, bluntly spoken.
 Difference makes an army of code generators which considers your routes file and twirl templates.
 Make compilable java and scala code.
-Which can sometimes mostly be auto-completed.
+Which can mostly be auto-completed.
 Code is interpreted and compiled on request, form a browser.
-And any error is displayed ith nice highlighting
+And any error is displayed with nice highlighting
 (sometimes it doesn't save you from good ol' "have you tried turning it on and of").
 
 View here is expressed with Twirl template engine.

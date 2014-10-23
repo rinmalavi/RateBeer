@@ -1,57 +1,85 @@
 @import com.scalabeer._
-@(optuser: Option[UserSnow], beers: Seq[(BeerSnow, Option[Int])])
+@(optuser: Option[UserGrid], beers: Seq[(BeerGrid, Option[Int])])
 @default(optuser){
 
 <script>
-    var listBeerApp = angular.module('listBeerApp', []);
-    listBeerApp.controller('listBeerCtrl', function($scope, $http) {
+    angular.module('listBeerApp', ['ui.bootstrap'])
+    .controller('listBeerCtrl', function($scope, $modal, $http) {
         $scope.ids = [];
-        $scope.grade = function(id) {
-            var gradejson = {'grade': $scope.ids[id]};
-            console.log(gradejson);
-            $http.post('/api/simpleGrade/' + id, gradejson)
-            .then(
-                function(resp) {
-                    console.log("successful graded");
-                },
-                function(resp) {
-                    console.log("fail graded");
-                }
-            );
+        $scope.grade = function(id, name) {
+            $modal.open({
+                templateUrl: '@routes.Assets.at("dialog/grade.html")',
+                controller: 'gradeInst',
+                resolve: {
+                    beername: function () {
+                        return name;
+                    }
+                 }
+            }).result.then( function (g) {
+                $http.post('/api/grade/' + id, g)
+                .then(
+                    function(resp) {
+                        $('div.info').html('added grade');
+                        $('button.grade' + id).replaceWith(g.grade);
+                    },
+                    function(resp) {
+                        $('div.info').append('failed add');
+                    }
+                );
+            });
         }
+    })
+    .controller('gradeInst', function($scope, $modalInstance, beername) {
+        $scope.beername = beername;
+        $scope.ok = function () {
+            var result = {
+                "grade" : $scope.grade,
+                "description" : $scope.description,
+                "tags" : $scope.tags
+            };
+            $modalInstance.close(result);
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
     });
+
 </script>
 <div ng-app="listBeerApp">
-<H2> List of Beers </H2>
-@if(beers.isEmpty) {
+    <H2> List of Beers </H2>
+    <div class="info"></div>
+    @if(beers.isEmpty) {
     <div>
         No beers yet.
     </div>
     } else {
-    <table class="table table-responsive table-custom"  ng-controller="listBeerCtrl">
+    <table class="table table-responsive table-custom" ng-controller="listBeerCtrl">
         <thead>
-            <th>name</th>
-            <th>type</th>
-            <th>grade</th>
-            @optuser.map( _ => <th>you graded</th>)
+        <th>name</th>
+        <th>type</th>
+        <th>grade</th>
+        @optuser.map( _ =>
+        <th>you graded</th>
+        )
         </thead>
         @for((beer, userGrade) <- beers) {
-            <tr>
-                <td><a href="@routes.Application.beerScreen(beer.URI)">@beer.name</a></td>
-                <td>@beer.beerType</td>
-                <td>@beer.averageGrade</td>
-                @optuser.map{ _ =>
-                    @userGrade.fold{
-                    <td id="@beer.URI">
-                         <input ng-model="ids[@beer.URI]" type="text" ng-keyup="$event.keyCode == 13 && grade(@beer.URI)" />
-                    </td>
-                    }{ grade =>
-                        <td>@grade</td>
-                    }
-                }
-            </tr>
+        <tr>
+            <td><a href="@routes.Application.beerScreen(beer.URI)">@beer.name</a></td>
+            <td>@beer.beerType</td>
+            <td>@beer.averageGrade</td>
+            @optuser.map{ _ =>
+            <td>
+            @userGrade.fold{
+                <button class="btn btn-warning grade@beer.URI" ng-click="grade(@beer.URI, @beer.name)">Rate @beer.name</button>
+            }{ grade =>
+                @grade
+            }
+            </td>
+            }
+        </tr>
         }
     </table>
 </div>
-    }
+}
 }
