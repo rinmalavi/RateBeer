@@ -1,4 +1,5 @@
-@(optuser: Option[RateBeer.UserSnow], userOpt: Option[RateBeer.UserSnow])
+@import com.scalabeer._
+@(optuser: Option[UserSnow], userOpt: Option[UserSnow])
 @default(optuser){
 @if(userOpt.isEmpty){<div class="nousertoshow">found no user to show</div>}
 @userOpt.map{ user =>

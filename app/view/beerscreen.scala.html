@@ -1,4 +1,5 @@
-@(optuser: Option[RateBeer.UserSnow], beer2show: Option[RateBeer.BeerSnow])
+@import com.scalabeer._
+@(optuser: Option[UserSnow], beer2show: Option[BeerSnow])
 @default(optuser){
 @beer2show.map { beer =>
             <div>Showing info for beer: @beer.name</div>

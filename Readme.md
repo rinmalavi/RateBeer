@@ -1,3 +1,31 @@
+Project setup:
+
+-- PostgreSQL --
+
+#install 9.3.x version of PostgreSQL
+sudo apt-get install postgresql-9.3
+
+#login as postgres superuser
+sudo su - postges
+
+#create database user "scalabeer", set password to "scalabeerpassword"
+createuser scalabeer -DIRS
+psql -c"ALTER USER scalabeer WITH PASSWORD 'scalabeerpassword';"
+
+#create database "scalabeerdb"
+createdb -Upostgres -Eutf8 -Ttemplate1 -Oscalabeer scalabeerdb
+
+-- Mono --
+
+# Visit http://www.mono-project.com/docs/getting-started/install/linux/
+wget http://download.mono-project.com/repo/xamarin.gpg
+sudo apt-key add xamarin.gpg
+sudo echo "deb http://download.mono-project.com/repo/debian wheezy main" > /etc/apt/sources.list.d/mono-xamarin.list
+sudo apt-get update
+sudo apt-get install mono-devel
+
+--
+
 # There Are Things 2BD!
 
 ### Add An Enum

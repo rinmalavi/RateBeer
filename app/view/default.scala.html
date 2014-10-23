@@ -1,4 +1,5 @@
-@(optuser: Option[RateBeer.UserSnow])(body: Html)
+@import com.scalabeer._
+@(optuser: Option[UserSnow])(body: Html)
 <html>
 <head>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,800,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
@@ -193,7 +194,7 @@
 
     </div><!-- main -->
     <footer class="footer">
-        <p class="text-center center-line"><span><small>powered by <strong><a href="http://dsl-platform.com" target="blank">DSL Platform</a></strong></small></span></p>
+        <p class="text-center center-line"><span><small>powered by <strong><a href="http://dsl-platform.com/" target="blank">DSL Platform</a></strong></small></span></p>
     </footer>
 
 </div><!-- container -->

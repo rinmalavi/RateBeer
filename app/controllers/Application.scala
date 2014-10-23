@@ -1,6 +1,6 @@
 package controllers
 
-import RateBeer._
+import com.scalabeer._
 import com.dslplatform.api.patterns._
 import org.slf4j.LoggerFactory
 
@@ -18,13 +18,14 @@ object Application extends Controller {
   private val logger = LoggerFactory.getLogger(getClass)
 
   // -----------------------------------------
-  private val locator = com.dslplatform.api.client.Bootstrap.init(getClass.getResourceAsStream("/project.props"))
+  private val locator = com.dslplatform.api.client.Bootstrap.init(getClass.getResourceAsStream("/dsl-project.props"))
 
   private lazy val userRepository = locator.resolve[PersistableRepository[User]]
   private lazy val userSnowRepository = locator.resolve[Repository[UserSnow]]
   private lazy val beerSnowRepository = locator.resolve[Repository[BeerSnow]]
   private lazy val beerRepository = locator.resolve[PersistableRepository[Beer]]
   private lazy val gradeRepository = locator.resolve[PersistableRepository[Grade]]
+
   private lazy implicit val ec = locator.resolve[ExecutionContext]
   private lazy implicit val duration = 10 minutes
 
