@@ -1,30 +1,34 @@
-Project setup:
+##Project setup:
 
--- PostgreSQL --
+###PostgreSQL
 
-#install 9.3.x version of PostgreSQL
-sudo apt-get install postgresql-9.3
+install 9.3.x version of PostgreSQL
 
-#login as postgres superuser
-sudo su - postgres
+    sudo apt-get install postgresql-9.3
 
-#create database user "scalabeer", set password to "scalabeerpassword"
-createuser scalabeer -DIRS
-psql -c"ALTER USER scalabeer WITH PASSWORD 'scalabeerpassword';"
+login as postgres superuser
 
-#create database "scalabeerdb"
-createdb -Upostgres -Eutf8 -Ttemplate1 -Oscalabeer scalabeerdb
+    sudo su - postgres
 
--- Mono --
+create database user "scalabeer", set password to "scalabeerpassword"
 
-# Visit http://www.mono-project.com/docs/getting-started/install/linux/
-wget http://download.mono-project.com/repo/xamarin.gpg
-sudo apt-key add xamarin.gpg
-sudo echo "deb http://download.mono-project.com/repo/debian wheezy main" > /etc/apt/sources.list.d/mono-xamarin.list
-sudo apt-get update
-sudo apt-get install mono-devel
+    createuser scalabeer -DIRS
+    psql -c"ALTER USER scalabeer WITH PASSWORD 'scalabeerpassword';"
 
---
+create database "scalabeerdb"
+
+    createdb -Upostgres -Eutf8 -Ttemplate1 -Oscalabeer scalabeerdb
+
+### Mono
+
+Visit http://www.mono-project.com/docs/getting-started/install/linux/
+
+    wget http://download.mono-project.com/repo/xamarin.gpg
+    sudo apt-key add xamarin.gpg
+    sudo echo "deb http://download.mono-project.com/repo/debian wheezy main" > /etc/apt/sources.list.d/mono-xamarin.list
+    sudo apt-get update
+    sudo apt-get install mono-devel
+
 
 # There Are Things 2BD!
 
