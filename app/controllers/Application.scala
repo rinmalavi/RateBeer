@@ -131,7 +131,7 @@ object Application extends Controller {
       user2show =>
         currentUserFO.map {
           currentUserO =>
-            userScreenPage(currentUserO, user2show) // todo - no good
+            userScreenPage(currentUserO, user2show)
         }
     }
   }
@@ -295,10 +295,12 @@ object Application extends Controller {
                   val newBeer = Beer(beerInfo, user)
                   val inserted = beerRepository.insert(newBeer).map {
                     _ =>
-                      Redirect(request.headers.get("Referer").getOrElse("/"))
+                      Ok("Successfully added new beer")
                   }
-                  inserted.onFailure {
-                    case e => println(e)
+                  inserted.recover {
+                    case e =>
+                      println(e)
+                      Results.NotModified
                   }
                   inserted
               }

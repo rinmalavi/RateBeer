@@ -40,8 +40,8 @@ Visit http://www.mono-project.com/docs/getting-started/install/linux/
 #### Learn English
 
 ##Intro
-This will try to be a guide through a process of modeling a fairly complicated portal for Beer rating.
-We'll use DSL-platform for our persistence and modeling, Play2 for presentation.
+This will try to be a guide through a process of modeling a mildly complicated portal for Beer rating.
+We'll use DSL-platform for our persistence and modeling, Play2 for servicing data over http, and angular for user experience.
 
 This text assumes you have mono(3.2+), java(8+) and sbt installed.
 
