@@ -1,0 +1,120 @@
+2014-10-20 15:24:08.0945|TRACE|Postgres database layer - fill table|localhost:5434 - dccTest
+2014-10-20 15:24:08.1034|TRACE|Postgres database layer - fill table|SELECT * FROM "-NGS-".Load_Type_Info()
+2014-10-20 15:24:08.1057|ERROR|Postgres database layer - fill table|Npgsql.NpgsqlException:
+Failed to establish a connection to 'localhost'.
+  at Npgsql.NpgsqlClosedState.Open (Npgsql.NpgsqlConnector context) [0x00000] in <filename unknown>:0 
+  at Npgsql.NpgsqlConnector.Open () [0x00000] in <filename unknown>:0 
+  at Npgsql.NpgsqlConnectorPool.GetPooledConnector (Npgsql.NpgsqlConnection Connection) [0x00000] in <filename unknown>:0 
+2014-10-20 17:02:50.3597|TRACE|Postgres database layer - fill table|localhost:5434 - dccTest
+2014-10-20 17:02:50.3680|TRACE|Postgres database layer - fill table|SELECT * FROM "-NGS-".Load_Type_Info()
+2014-10-20 17:02:50.3700|ERROR|Postgres database layer - fill table|Npgsql.NpgsqlException:
+Failed to establish a connection to 'localhost'.
+  at Npgsql.NpgsqlClosedState.Open (Npgsql.NpgsqlConnector context) [0x00000] in <filename unknown>:0 
+  at Npgsql.NpgsqlConnector.Open () [0x00000] in <filename unknown>:0 
+  at Npgsql.NpgsqlConnectorPool.GetPooledConnector (Npgsql.NpgsqlConnection Connection) [0x00000] in <filename unknown>:0 
+2014-10-20 17:04:31.0214|TRACE|Postgres notification|Setting up notification connection
+2014-10-20 17:04:31.0397|TRACE|Postgres notification|Notification state changed: Open
+2014-10-20 17:04:48.2758|DEBUG|Postgres notification|Postgres notification: aggregate_roots with RateBeer.User:Insert:{as}
+2014-10-20 17:09:09.4209|DEBUG|Postgres notification|Postgres notification: aggregate_roots with RateBeer.Beer:Insert:{1001}
+2014-10-20 17:22:29.4818|DEBUG|Postgres notification|Postgres notification: aggregate_roots with RateBeer.Grade:Insert:{as/1001}
+2014-10-20 17:22:31.1025|TRACE|Postgres database layer - execute data reader|localhost:5432 - dccTest
+2014-10-20 17:22:31.1025|TRACE|Postgres database layer - execute data reader|execute provided stream
+2014-10-20 17:22:31.1047|ERROR|Postgres database layer - execute data reader|Npgsql.NpgsqlException:
+duplicate key value violates unique constraint "pk_Grade"
+Severity: ERROR
+Code: 23505
+  at Npgsql.NpgsqlState+<ProcessBackendResponses_Ver_3>d__a.MoveNext () [0x00000] in <filename unknown>:0 
+  at Npgsql.ForwardsOnlyDataReader.GetNextResponseObject () [0x00000] in <filename unknown>:0 
+2014-10-20 17:22:31.1047|ERROR|Postgres database layer - execute data reader|execute provided stream
+2014-10-21 15:00:46.5897|TRACE|Postgres notification|Setting up notification connection
+2014-10-21 15:00:46.6140|TRACE|Postgres notification|Notification state changed: Open
+2014-10-21 15:01:33.2139|DEBUG|Postgres notification|Postgres notification: aggregate_roots with RateBeer.User:Insert:{fasa}
+2014-10-21 15:03:33.4090|DEBUG|Postgres notification|Postgres notification: aggregate_roots with RateBeer.User:Insert:{aa}
+2014-10-21 15:12:08.2429|DEBUG|Postgres notification|Postgres notification: aggregate_roots with RateBeer.User:Insert:{qwe}
+2014-10-21 15:31:13.3109|DEBUG|Postgres notification|Postgres notification: aggregate_roots with RateBeer.Grade:Insert:{qwe/1001}
+2014-10-21 15:47:41.0707|DEBUG|Postgres notification|Postgres notification: aggregate_roots with RateBeer.Beer:Insert:{1002}
+2014-10-23 12:24:51.6819|DEBUG|Postgres notification|Postgres notification: aggregate_roots with RateBeer.Grade:Insert:{qwe/1002}
+2014-10-23 12:49:10.6323|DEBUG|Postgres notification|Postgres notification: aggregate_roots with RateBeer.Beer:Insert:{1003}
+2014-10-23 12:49:16.9755|DEBUG|Postgres notification|Postgres notification: aggregate_roots with RateBeer.Grade:Insert:{qwe/1003}
+2014-10-23 13:44:46.9144|DEBUG|Postgres notification|Postgres notification: aggregate_roots with RateBeer.Beer:Insert:{1004}
+2014-10-23 13:46:42.8737|TRACE|Postgres database layer - execute data reader|localhost:5432 - dccTest
+2014-10-23 13:46:42.8737|TRACE|Postgres database layer - execute data reader|execute provided stream
+2014-10-23 13:46:42.8762|ERROR|Postgres database layer - execute data reader|Npgsql.NpgsqlException:
+duplicate key value violates unique constraint "pk_Grade"
+Severity: ERROR
+Code: 23505
+  at Npgsql.NpgsqlState+<ProcessBackendResponses_Ver_3>d__a.MoveNext () [0x00000] in <filename unknown>:0 
+  at Npgsql.ForwardsOnlyDataReader.GetNextResponseObject () [0x00000] in <filename unknown>:0 
+2014-10-23 13:46:42.8765|ERROR|Postgres database layer - execute data reader|execute provided stream
+2014-10-23 13:58:34.3649|DEBUG|Postgres notification|Postgres notification: aggregate_roots with RateBeer.Grade:Insert:{qwe/1004}
+2014-10-23 14:38:16.9540|DEBUG|Postgres notification|Postgres notification: aggregate_roots with RateBeer.Beer:Insert:{1005}
+2014-10-23 14:38:28.5644|DEBUG|Postgres notification|Postgres notification: aggregate_roots with RateBeer.Grade:Insert:{qwe/1005}
+2014-10-23 15:17:35.5250|DEBUG|Postgres notification|Postgres notification: aggregate_roots with RateBeer.Beer:Insert:{1006}
+2014-10-23 15:19:02.2143|DEBUG|Postgres notification|Postgres notification: aggregate_roots with RateBeer.Grade:Insert:{qwe/1006}
+2014-10-23 17:43:05.8278|TRACE|Postgres notification|Setting up notification connection
+2014-10-23 17:43:05.8452|TRACE|Postgres notification|Notification state changed: Open
+2014-10-23 17:56:35.6288|TRACE|Postgres database layer - fill table|localhost:5434 - dccTest
+2014-10-23 17:56:35.6370|TRACE|Postgres database layer - fill table|SELECT * FROM "-NGS-".Load_Type_Info()
+2014-10-23 17:56:35.6393|ERROR|Postgres database layer - fill table|Npgsql.NpgsqlException:
+Failed to establish a connection to 'localhost'.
+  at Npgsql.NpgsqlClosedState.Open (Npgsql.NpgsqlConnector context) [0x00000] in <filename unknown>:0 
+  at Npgsql.NpgsqlConnector.Open () [0x00000] in <filename unknown>:0 
+  at Npgsql.NpgsqlConnectorPool.GetPooledConnector (Npgsql.NpgsqlConnection Connection) [0x00000] in <filename unknown>:0 
+2014-10-23 17:59:20.9645|TRACE|Postgres notification|Setting up notification connection
+2014-10-23 17:59:20.9821|TRACE|Postgres notification|Notification state changed: Open
+2014-10-23 17:59:21.0682|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.User:Insert:{asd}
+2014-10-23 17:59:34.5110|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Beer:Insert:{1001}
+2014-10-23 17:59:48.5525|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Grade:Insert:{asd/1001}
+2014-10-23 18:55:04.9887|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Beer:Insert:{1002}
+2014-10-23 18:55:33.2775|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Grade:Insert:{asd/1002}
+2014-10-23 19:02:15.9554|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Beer:Insert:{1003}
+2014-10-23 19:02:20.5725|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Beer:Insert:{1004}
+2014-10-23 19:02:30.9495|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Grade:Insert:{asd/1003}
+2014-10-23 19:05:36.2723|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Grade:Insert:{asd/1004}
+2014-10-23 19:08:02.1708|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Beer:Insert:{1005}
+2014-10-23 19:10:03.0293|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Grade:Insert:{asd/1005}
+2014-10-23 19:10:25.8429|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Beer:Insert:{1006}
+2014-10-23 19:10:41.5464|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Beer:Insert:{1007}
+2014-10-23 19:10:48.4302|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Grade:Insert:{asd/1007}
+2014-10-23 19:11:47.5845|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Beer:Insert:{1008}
+2014-10-23 19:11:55.9618|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Grade:Insert:{asd/1008}
+2014-10-23 19:13:19.0216|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Beer:Insert:{1009}
+2014-10-23 19:13:26.8058|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Grade:Insert:{asd/1009}
+2014-10-23 19:14:49.8481|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Beer:Insert:{1010}
+2014-10-23 19:15:00.4011|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Beer:Insert:{1011}
+2014-10-23 19:15:07.2355|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Grade:Insert:{asd/1011}
+2014-10-23 19:15:38.7010|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Beer:Insert:{1012}
+2014-10-23 19:15:45.5858|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Grade:Insert:{asd/1012}
+2014-10-23 19:16:11.0888|TRACE|Postgres database layer - execute data reader|localhost:5432 - scalabeerdb
+2014-10-23 19:16:11.0898|TRACE|Postgres database layer - execute data reader|execute provided stream
+2014-10-23 19:16:11.0926|ERROR|Postgres database layer - execute data reader|Npgsql.NpgsqlException:
+duplicate key value violates unique constraint "pk_Grade"
+Severity: ERROR
+Code: 23505
+  at Npgsql.NpgsqlState+<ProcessBackendResponses_Ver_3>d__a.MoveNext () [0x00000] in <filename unknown>:0 
+  at Npgsql.ForwardsOnlyDataReader.GetNextResponseObject () [0x00000] in <filename unknown>:0 
+2014-10-23 19:16:11.0926|ERROR|Postgres database layer - execute data reader|execute provided stream
+2014-10-23 19:16:15.3085|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Beer:Insert:{1013}
+2014-10-23 19:16:22.8509|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Grade:Insert:{asd/1013}
+2014-10-24 11:33:49.9003|TRACE|Postgres notification|Setting up notification connection
+2014-10-24 11:33:49.9190|TRACE|Postgres notification|Notification state changed: Open
+2014-10-24 11:49:05.3989|TRACE|Postgres notification|Setting up notification connection
+2014-10-24 11:49:05.4206|TRACE|Postgres notification|Notification state changed: Open
+2014-10-24 11:50:14.2272|TRACE|Postgres notification|Setting up notification connection
+2014-10-24 11:50:14.2487|TRACE|Postgres notification|Notification state changed: Open
+2014-10-24 11:50:51.5308|TRACE|Postgres notification|Setting up notification connection
+2014-10-24 11:50:51.5500|TRACE|Postgres notification|Notification state changed: Open
+2014-10-24 11:51:35.6307|TRACE|Postgres notification|Setting up notification connection
+2014-10-24 11:51:35.6531|TRACE|Postgres notification|Notification state changed: Open
+2014-10-24 12:09:30.3275|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Beer:Insert:{1014}
+2014-10-24 12:09:54.8544|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.User:Insert:{asdf}
+2014-10-24 12:10:13.5086|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Grade:Insert:{asdf/1007}
+2014-10-24 14:29:31.5714|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Beer:Insert:{1015}
+2014-10-24 14:49:59.3903|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Grade:Insert:{asdf/1013}
+2014-10-24 14:54:32.4401|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Grade:Insert:{asdf/1014}
+2014-10-24 14:54:42.6513|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Beer:Insert:{1016}
+2014-10-24 14:56:42.1429|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Beer:Insert:{1017}
+2014-10-24 15:01:58.2929|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Grade:Insert:{asdf/1002}
+2014-10-24 15:05:18.8944|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Beer:Insert:{1018}
+2014-10-24 15:08:26.1340|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Beer:Insert:{1019}
+2014-10-24 15:31:05.4393|DEBUG|Postgres notification|Postgres notification: aggregate_roots with scalabeer.Beer:Insert:{1020}

@@ -1,0 +1,36 @@
+2014-10-20 15:24:08.1057|ERROR|Postgres database layer - fill table|Npgsql.NpgsqlException:
+Failed to establish a connection to 'localhost'.
+  at Npgsql.NpgsqlClosedState.Open (Npgsql.NpgsqlConnector context) [0x00000] in <filename unknown>:0 
+  at Npgsql.NpgsqlConnector.Open () [0x00000] in <filename unknown>:0 
+  at Npgsql.NpgsqlConnectorPool.GetPooledConnector (Npgsql.NpgsqlConnection Connection) [0x00000] in <filename unknown>:0 
+2014-10-20 17:02:50.3700|ERROR|Postgres database layer - fill table|Npgsql.NpgsqlException:
+Failed to establish a connection to 'localhost'.
+  at Npgsql.NpgsqlClosedState.Open (Npgsql.NpgsqlConnector context) [0x00000] in <filename unknown>:0 
+  at Npgsql.NpgsqlConnector.Open () [0x00000] in <filename unknown>:0 
+  at Npgsql.NpgsqlConnectorPool.GetPooledConnector (Npgsql.NpgsqlConnection Connection) [0x00000] in <filename unknown>:0 
+2014-10-20 17:22:31.1047|ERROR|Postgres database layer - execute data reader|Npgsql.NpgsqlException:
+duplicate key value violates unique constraint "pk_Grade"
+Severity: ERROR
+Code: 23505
+  at Npgsql.NpgsqlState+<ProcessBackendResponses_Ver_3>d__a.MoveNext () [0x00000] in <filename unknown>:0 
+  at Npgsql.ForwardsOnlyDataReader.GetNextResponseObject () [0x00000] in <filename unknown>:0 
+2014-10-20 17:22:31.1047|ERROR|Postgres database layer - execute data reader|execute provided stream
+2014-10-23 13:46:42.8762|ERROR|Postgres database layer - execute data reader|Npgsql.NpgsqlException:
+duplicate key value violates unique constraint "pk_Grade"
+Severity: ERROR
+Code: 23505
+  at Npgsql.NpgsqlState+<ProcessBackendResponses_Ver_3>d__a.MoveNext () [0x00000] in <filename unknown>:0 
+  at Npgsql.ForwardsOnlyDataReader.GetNextResponseObject () [0x00000] in <filename unknown>:0 
+2014-10-23 13:46:42.8765|ERROR|Postgres database layer - execute data reader|execute provided stream
+2014-10-23 17:56:35.6393|ERROR|Postgres database layer - fill table|Npgsql.NpgsqlException:
+Failed to establish a connection to 'localhost'.
+  at Npgsql.NpgsqlClosedState.Open (Npgsql.NpgsqlConnector context) [0x00000] in <filename unknown>:0 
+  at Npgsql.NpgsqlConnector.Open () [0x00000] in <filename unknown>:0 
+  at Npgsql.NpgsqlConnectorPool.GetPooledConnector (Npgsql.NpgsqlConnection Connection) [0x00000] in <filename unknown>:0 
+2014-10-23 19:16:11.0926|ERROR|Postgres database layer - execute data reader|Npgsql.NpgsqlException:
+duplicate key value violates unique constraint "pk_Grade"
+Severity: ERROR
+Code: 23505
+  at Npgsql.NpgsqlState+<ProcessBackendResponses_Ver_3>d__a.MoveNext () [0x00000] in <filename unknown>:0 
+  at Npgsql.ForwardsOnlyDataReader.GetNextResponseObject () [0x00000] in <filename unknown>:0 
+2014-10-23 19:16:11.0926|ERROR|Postgres database layer - execute data reader|execute provided stream
