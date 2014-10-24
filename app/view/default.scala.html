@@ -1,15 +1,18 @@
 @import com.scalabeer._
 @(optuser: Option[UserGrid])(body: Html)
-<html>
+<html ng-app="listBeerApp">
 <head>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,800,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular.js"></script>
-    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.2.js"></script>
+    <script src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular.js'></script>
+    <script src='//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.2.js'></script>
+    <script src='@routes.Assets.at("js/app.js")'></script>
     <link rel='stylesheet' href='@routes.Assets.at("css/bootstrap.min.css")'>
     <link rel='stylesheet' href='@routes.Assets.at("css/style.min.css")'>
 </head>
-<body>
+<body >
+<div class="info"></div>
 <div class="container">
+
     <header class="header">
         <p class="text-center">
 
@@ -71,8 +74,8 @@
 
                 } else {
 
-                <p class="text-center">
-                    <a href="#modal-add-beer" data-toggle="modal" data-target="#modal-add-beer" class="btn cta-btn alt">
+                <p class="text-center" ng-controller="addBeerCtrl">
+                    <a ng-click="addBeer()" class="btn cta-btn alt">
                         Add a new beer <span class="glyphicon glyphicon-star"></span>
                     </a>
                 </p>

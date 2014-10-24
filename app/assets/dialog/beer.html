@@ -1,0 +1,14 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+    <h4 class="modal-title" id="myModalLabel">Add a new beer</h4>
+</div>
+<div class="modal-body">
+    <label for="beerName" class="col-sm-4 control-label">Name of the beer</label>
+    <input type="text" ng-model="type" class="form-control" id="beerName" placeholder="Enter beer name" />
+    <label for="beerType" class="col-sm-4 control-label">Type of the beer</label>
+    <input type="text" ng-model="name" class="form-control" id="beerType" placeholder="Enter beer type" />
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">OK</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>

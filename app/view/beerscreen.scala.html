@@ -2,8 +2,14 @@
 @(optuser: Option[UserGrid], beer2show: Option[BeerGrid])
 @default(optuser){
 @beer2show.map { beer =>
-            <div>Showing info for beer: @beer.name</div>
-
-            <div>Average grade: @beer.averageGrade</div>
+    <div>Showing info for beer: @beer.name</div>
+    <div>Average grade: @beer.averageGrade</div>
+    @for(grade <- beer.grades) {
+        <br>
+        <div>user: @grade.userID
+            <div>grade: @grade.grade</div>
+            <div>description: @grade.detailedDescription</div>
+        </div>
         }
+    }
 }

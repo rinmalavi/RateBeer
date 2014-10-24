@@ -1,18 +1,21 @@
 @import com.scalabeer._
-@(optuser: Option[UserGrid], userReportOpt: Option[UserReport.Result])
+@(optuser: Option[UserGrid], userReport: UserReport.Result)
 @default(optuser){
-    @if(userReportOpt.isEmpty){<div class="nousertoshow">found no user to show</div>}
-    @userReportOpt.map{ userReport =>
-        Showing page for user: <h2 class="username">@userReport.userGrid.name</h2>
+   @if(Option(userReport.userGrid).isEmpty){<div class="nousertoshow">found no user to show</div>}
+   @Option(userReport.userGrid).map{ userGrid =>
+        Showing page for user:
+        <h2 class="username">
+                    @userGrid.name
+        </h2>
         <div>
             Added beers
             <ul>
-                @for(beer <- userReport.userGrid.beers) {
+                @for(beer <- userGrid.beers) {
                 <li>@beer.info.name</li>
             }
             </ul>
 
-            Average grade received for addie: @userReport.userGrid.averageBeerAddedGrade
+            Average grade received for addie: @userGrid.averageBeerAddedGrade
         </div>
 
         <div>
@@ -22,7 +25,7 @@
                    <li>@grade.beer.info.name @grade.grade</li>
                 }
             </ul>
-            Average grade given for addie: @userReport.userGrid.averageGivenGrade
+            Average grade given for addie: @userGrid.averageGivenGrade
         </div>
     }
 }

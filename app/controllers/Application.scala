@@ -23,7 +23,7 @@ object Application extends Controller {
 
   private lazy val userRepository = locator.resolve[PersistableRepository[User]]
   private lazy val UserGridRepository = locator.resolve[Repository[UserGrid]]
-  private lazy val BbeerGridRepository = locator.resolve[Repository[BeerGrid]]
+  private lazy val beerGridRepository = locator.resolve[Repository[BeerGrid]]
   private lazy val beerRepository = locator.resolve[PersistableRepository[Beer]]
   private lazy val gradeRepository = locator.resolve[PersistableRepository[Grade]]
   private lazy val reportingProxy = locator.resolve[ReportingProxy]
@@ -49,11 +49,11 @@ object Application extends Controller {
     userRepository.search(new User.findUser(username, password)).map(_.nonEmpty)
   }
 
-  def getBeers: Future[Seq[BeerGrid]] = BbeerGridRepository.search()
+  def getBeers: Future[Seq[BeerGrid]] = beerGridRepository.search()
 
   def getBeer(uri: String): Future[Beer] = beerRepository.find(uri)
 
-  def getBeerInfo(uri: String): Future[BeerGrid] = BbeerGridRepository.find(uri)
+  def getBeerInfo(uri: String): Future[BeerGrid] = beerGridRepository.find(uri)
 
   def getUsers: Future[Seq[UserGrid]] = UserGridRepository.search()
 
@@ -119,7 +119,7 @@ object Application extends Controller {
   }
 
   def userScreen(user2showName: String) = Action.async { implicit request =>
-    def userScreenPage(currentUser: Option[UserGrid], user2show: Option[UserReport.Result]) = Ok(view.html.userscreen(currentUser, user2show))
+    def userScreenPage(currentUser: Option[UserGrid], user2show: UserReport.Result) = Ok(view.html.userscreen(currentUser, user2show))
 
     val user2showFO = getUserReport(user2showName)
 
@@ -131,7 +131,7 @@ object Application extends Controller {
       user2show =>
         currentUserFO.map {
           currentUserO =>
-            userScreenPage(currentUserO, Option(user2show)) // todo - no good
+            userScreenPage(currentUserO, user2show) // todo - no good
         }
     }
   }
@@ -151,7 +151,6 @@ object Application extends Controller {
           currentUserFO.map {
             currentUserO =>
               beerScreenPage(currentUserO, Option(beer2show))
-
           }
       }
   }
@@ -184,10 +183,10 @@ object Application extends Controller {
       beers =>
         currentUserFO.map {
           currentUserO =>
-            val BeerGrid = beers.map{
+            val BeerGrid = beers.map {
               beer =>
-                val userGrade = currentUserO.flatMap{
-                  _.grades.filter{grade => grade.beer.info.name == beer.name }.map(_.grade).headOption // todo - hidden lazy load - optimize with report
+                val userGrade = currentUserO.flatMap {
+                  _.grades.filter { grade => grade.beer.info.name == beer.name}.map(_.grade).headOption // todo - hidden lazy load - optimize with report
                 }
                 (beer, userGrade)
             }
@@ -228,29 +227,30 @@ object Application extends Controller {
   }
 
   def newSimpleGrade(uri: String) = Action.async { implicit request =>
-      request.session.get("username").fold(
-        Future.successful(BadRequest("Not signed in!")))(
-      username => {
-        simpleGradeForm.bindFromRequest().fold(
-          _ => Future.successful(BadRequest("Not a grade!")),
-          gradeStr => {
-            getUser(username).flatMap {
-              user =>
-                getBeer(uri).flatMap {
-                  beer =>
-                    val grade = Grade(user, beer, grade = gradeStr.toInt)
-                    val inserted = gradeRepository.insert(grade).map {
-                      _ =>
-                        Ok("You graded " + gradeStr)
-                    }.recover{ case e =>
-                      println(e)
-                      Results.NotModified}
-                    inserted
-                }
+    request.session.get("username").fold(
+      Future.successful(BadRequest("Not signed in!")))(
+        username => {
+          simpleGradeForm.bindFromRequest().fold(
+            _ => Future.successful(BadRequest("Not a grade!")),
+            gradeStr => {
+              getUser(username).flatMap {
+                user =>
+                  getBeer(uri).flatMap {
+                    beer =>
+                      val grade = Grade(user, beer, grade = gradeStr.toInt)
+                      val inserted = gradeRepository.insert(grade).map {
+                        _ =>
+                          Ok("You graded " + gradeStr)
+                      }.recover { case e =>
+                        println(e)
+                        Results.NotModified
+                      }
+                      inserted
+                  }
+              }
             }
-          }
-        )
-      })
+          )
+        })
   }
 
   def newGrade(uri: String) = Action.async { implicit request =>
@@ -258,27 +258,28 @@ object Application extends Controller {
       Future.successful(BadRequest("Not signed in!")))(
         username => {
           gradeForm.bindFromRequest().fold(
-            a => Future.successful(BadRequest("Not a grade!" + a)),
-          {case (g: String, d: String, t: String) => {
-            getUser(username).flatMap {
-              user =>
-                getBeer(uri).flatMap {
-                  beer =>
-                    val grade = Grade(user, beer, grade = g.toInt, detailedDescription = d, tags = t.split(" "))
-                    val inserted = gradeRepository.insert(grade).map {
-                      _ =>
-                        Ok("You graded " + g)
-                    }.recover { case e =>
-                      println(e)
-                      Results.NotModified
-                    }
-                    inserted
-                }
-            }
-          } }
-          )
-        })
+          a => Future.successful(BadRequest("Not a grade!" + a)), {
+            case (g: String, d: String, t: String) =>
+              getUser(username).flatMap {
+                user =>
+                  getBeer(uri).flatMap {
+                    beer =>
+                      val grade = Grade(user, beer, grade = g.toInt, detailedDescription = d, tags = t.split(" "))
+                      val inserted = gradeRepository.insert(grade).map {
+                        _ =>
+                          Ok("You graded " + g)
+                      }.recover { case e =>
+                        println(e)
+                        Results.NotModified
+                      }
+                      inserted
+                  }
+              }
+          })
+        }
+      )
   }
+
   //-------------------------------------------------
 
   def newBeer() = Action.async { implicit request =>

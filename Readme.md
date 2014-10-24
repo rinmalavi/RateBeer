@@ -162,7 +162,10 @@ And remove the height field because all are equal height under the Beer.
       root User {
         String name;
         Int age;
-      } 
+        
+        specification FindByName 'it => it.name == name' {
+          String name;
+      }
     }
 
 Lets apply this schema. Call (1)
@@ -227,14 +230,15 @@ Like this ...
     
 In runtime they are lazy loaded so we don't have to worry if it will strain any resources.
 
+## Modeling your application
+
 #### Presentation
 
 Not rely a part of a model, until you think of the data you want to show.
 In dsl-platform `snowflake` is a kind of a view throughout an entity.
 It has 1:1 relationship with its associated entity.
 
-## Modeling your application
-
+###Snowflake
 Lets say we want to show some information about a user.
 Let it be `name`, `age`, added `beers`, `grades` he gave, average grade he gave.
 Maybe even something like average grade of average grades of beers he added...
@@ -270,7 +274,73 @@ And apply the new DSL.
 In the classpath you will now notice there is a new class called `UserGrid`.
 Similarly will make `BeerGrid` with information we want to show about the beers.
 And `GradeGrid` with information about grades.
-Implementation is fairly simple and you can see it in `dsl/model/scalabeer.dsl`  
+Implementation is fairly simple and you can see it in `dsl/model/scalabeer.dsl`.
+
+Snowflakes are good for putting together the data which is bound to the single root.
+
+####Repositories
+To persist a root we could use `active-record`.
+If it were available by setting `with-active-record` in compiler properties, we could call `.create()` method.
+However that is generally discouraged.
+Repository is a set of functionaries available on data.
+An instance of repository is made available by calling `resolve` method from `ServiceLocator` instance you got from `Bootstrap.init` call.
+
+    locator.resolve[PersistableRepository[User]]
+
+Would provide you with an instance of `PersistableRepository`.
+Such repositories can be instantiated on aggregates.
+They provide CRUD operations.
+Read as `find` an entity by its identification `Repository`
+`search` by some predicate is provided with `SearchableRepository`.
+They inherit upward in order mentioned.
+
+If we wanted to insert a User, you would call :
+
+    val user = User(....)
+    val uriFuture: Future[String] = locator.resolve[PersistableRepository[User]].insert(user)
+
+If this operation was successful result of this operation would be its primary key.
+Failure would result in an error within this future.
+
+We could find a snowflake of this root `UserGrid` now that we have persisted it:
+
+    val userGridFuture: Future[UserGrid] = uriFuture.map{
+        uri => 
+            locator.resolve[Repository[UserGrid]].find(uri)
+        }
+
+To search by a predicate we use search function:
+
+     locator.resolve[SearchableRepository[UserGrid]].search(someUserName)
+
+of course could have also used `Repository` instance here since it inherits from search from `SearchableRepository`.
+
+###Report
+
+We may want to compose data which is not necessarily bound to a single aggregate.
+We want prevent round-trips.
+For this use case we can define reports.
+For example:
+
+    report UserReport {
+      String username;
+      UserGrid userGrid 'it => it.name == username';
+      List<GradeGrid> userGrades 'it => it.user.username == username';
+    }
+
+in code we define UserReport class, and call populate on it:
+
+    new UserReport(username).populate(locator)
+    
+or if we want Future object back, call it on reportingProxy:
+
+    locator[ReportingProxy].populate(new UserReport(username))
+
+Method returns `UserReport.Result` class which will contain `userGrid` and a `List[GradeGrid]` if this username `exists`.
+    
+
+
+
 
 ## Play
 
